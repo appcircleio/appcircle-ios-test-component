@@ -1,4 +1,4 @@
-# Appcircle Xcodebuild For Test
+# Appcircle Xcodebuild for Unit and UI Tests
 
 Appcircle helps you perform unit and UI tests for your iOS applications at once.
 Unit tests usually test a piece of your code and confirm the code behaves as expected in certain conditions.
