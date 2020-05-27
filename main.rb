@@ -23,7 +23,7 @@ $configuration_name = (ENV["AC_CONFIGURATION_NAME"] != nil && ENV["AC_CONFIGURAT
 
 $extra_options = []
 if ENV["AC_ARCHIVE_FLAGS"] != "" && ENV["AC_ARCHIVE_FLAGS"] != nil
-  $extra_options = ENV["AC_ARCHIVE_FLAGS"].split(",")
+  $extra_options = ENV["AC_ARCHIVE_FLAGS"].split("|")
 end
 
 #compiler_index_store_enable - Options: YES, NO
