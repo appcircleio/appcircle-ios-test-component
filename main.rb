@@ -12,7 +12,7 @@ $project_path = ENV["AC_PROJECT_PATH"] || abort('Missing AC_PROJECT_PATH.')
 $repository_path = ENV["AC_REPOSITORY_DIR"]
 $project_full_path = $repository_path ? (Pathname.new $repository_path).join($project_path) : $project_path
 $scheme = env_has_key("AC_SCHEME")
-$output_path = env_has_key("AC_OUTPUT_DIR")
+$output_path = env_has_key("AC_OUTPUT_DIR_PATH")
 $test_result_path = "#{$output_path}/test.xcresult"
 
 $test_os_version = env_has_key("AC_TEST_OS_VERSION")
