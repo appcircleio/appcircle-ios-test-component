@@ -31,7 +31,7 @@ $compiler_index_store_enable = env_has_key("AC_COMPILER_INDEX_STORE_ENABLE")
 
 # Create a function to run test commands
 def run_command(command, skip_abort)
-  puts "@[command] #{command}"
+  puts "@@[command] #{command}"
   status = nil
   stdout_str = nil
   stderr_str = nil
