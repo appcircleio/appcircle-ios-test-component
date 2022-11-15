@@ -79,12 +79,13 @@ if $compiler_index_store_enable != nil
   command_xcodebuild_test.concat("COMPILER_INDEX_STORE_ENABLE=#{$compiler_index_store_enable}")
   command_xcodebuild_test.concat(" ")
 end
-# Run our function and perform the tests
-run_command(command_xcodebuild_test,false)
 
 ### Write Environment Variable
 open(ENV['AC_ENV_FILE_PATH'], 'a') { |f|
   f.puts "AC_TEST_RESULT_PATH=#{$test_result_path}"
 }
+
+# Run our function and perform the tests
+run_command(command_xcodebuild_test,false)
 
 exit 0
