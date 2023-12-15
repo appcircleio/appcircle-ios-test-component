@@ -1,6 +1,7 @@
 # Instal dependencies
 require 'open3'
 require 'pathname'
+require 'English'
 
 # Check & validate Enviroment Variables
 def env_has_key(key)
@@ -30,25 +31,20 @@ end
 $compiler_index_store_enable = env_has_key("AC_COMPILER_INDEX_STORE_ENABLE")
 
 # Create a function to run test commands
-def run_command(command, skip_abort)
+def run_command_simple(command)
   puts "@@[command] #{command}"
-  status = nil
-  stdout_str = nil
-  stderr_str = nil
-  Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
-    stdout.each_line do |line|
-      puts line
-    end
-    stdout_str = stdout.read
-    stderr_str = stderr.read
-    status = wait_thr.value
-  end
-  unless status.success?
-    puts stderr_str
-    unless skip_abort
-      exit 1
-    end
-  end
+  stderr_file = "#{ENV['AC_TEMP_DIR']}/.command.stderr.log"
+  command.concat(' 2>')
+  command.concat(stderr_file)
+  return if system(command)
+
+  exit_code = $CHILD_STATUS.exitstatus
+  system("cat #{stderr_file}")
+  abort_script("@@[error] Unexpected exit with code #{exit_code}. Check logs for details.")
+end
+
+def abort_script(error)
+  abort("#{error}")
 end
 
 # Command to tell Xcode to run tests with parameters
@@ -86,6 +82,6 @@ open(ENV['AC_ENV_FILE_PATH'], 'a') { |f|
 }
 
 # Run our function and perform the tests
-run_command(command_xcodebuild_test,false)
+run_command_simple(command_xcodebuild_test)
 
 exit 0
