@@ -47,6 +47,22 @@ def abort_script(error)
   abort("#{error}")
 end
 
+def wait_for_simulators(timeout_seconds: 180, interval_seconds: 3)
+  puts "@@[command] Waiting for iOS simulators to be available..."
+  deadline = Time.now + timeout_seconds
+  loop do
+    stdout, status = Open3.capture2('xcrun simctl list devices available')
+    if status.success? && stdout.match?(/\((?:Booted|Shutdown)\)/)
+      puts "@@[info] iOS simulators are available."
+      return
+    end
+    if Time.now >= deadline
+      abort_script("@@[error] Timed out after #{timeout_seconds}s waiting for iOS simulators to become available.")
+    end
+    sleep interval_seconds
+  end
+end
+
 # Command to tell Xcode to run tests with parameters
 command_xcodebuild_test = "xcodebuild -scheme \"#{$scheme}\" -destination \"platform=#{$test_platform},name=#{$test_device},OS=#{$test_os_version}\" -resultBundlePath \"#{$test_result_path}\" -derivedDataPath \"#{$temporary_path}/Test/DerivedData\" test"
 
@@ -80,6 +96,11 @@ end
 open(ENV['AC_ENV_FILE_PATH'], 'a') { |f|
   f.puts "AC_TEST_RESULT_PATH=#{$test_result_path}"
 }
+
+# Wait for simulators to be ready when targeting a Simulator platform
+if $test_platform.include?("Simulator")
+  wait_for_simulators
+end
 
 # Run our function and perform the tests
 run_command_simple(command_xcodebuild_test)
