@@ -8,6 +8,8 @@ def env_has_key(key)
   return (ENV[key] != nil && ENV[key] !="") ? ENV[key] : abort("Missing #{key}.")
 end
 
+if __FILE__ == $PROGRAM_NAME
+
 $temporary_path = env_has_key("AC_TEMP_DIR")
 $project_path = ENV["AC_PROJECT_PATH"] || abort('Missing AC_PROJECT_PATH.')
 $repository_path = ENV["AC_REPOSITORY_DIR"]
@@ -30,6 +32,8 @@ end
 #compiler_index_store_enable - Options: YES, NO
 $compiler_index_store_enable = env_has_key("AC_COMPILER_INDEX_STORE_ENABLE")
 
+end # if __FILE__ == $PROGRAM_NAME
+
 # Create a function to run test commands
 def run_command_simple(command)
   puts "@@[command] #{command}"
@@ -46,6 +50,8 @@ end
 def abort_script(error)
   abort("#{error}")
 end
+
+if __FILE__ == $PROGRAM_NAME
 
 # Command to tell Xcode to run tests with parameters
 command_xcodebuild_test = "xcodebuild -scheme \"#{$scheme}\" -destination \"platform=#{$test_platform},name=#{$test_device},OS=#{$test_os_version}\" -resultBundlePath \"#{$test_result_path}\" -derivedDataPath \"#{$temporary_path}/Test/DerivedData\" test"
@@ -85,3 +91,5 @@ open(ENV['AC_ENV_FILE_PATH'], 'a') { |f|
 run_command_simple(command_xcodebuild_test)
 
 exit 0
+
+end # if __FILE__ == $PROGRAM_NAME
