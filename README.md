@@ -18,3 +18,13 @@ Optional Input Variables
 
 Output Variables
 - `$AC_TEST_RESULT_PATH`: Test result path.
+
+## Running tests
+
+Requires [RSpec](https://rspec.info) gem and Ruby standard library (Coverage). No Gemfile or Bundler needed.
+
+```bash
+ruby test/test_main.rb
+```
+
+A pass/fail summary and a coverage report are printed at the end of each run.
